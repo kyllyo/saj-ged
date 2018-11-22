@@ -30,6 +30,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSmartCopy;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import br.gov.serpro.saj.ged.exception.NegocioException;
 import br.gov.serpro.saj.ged.model.AnexoManifestacao;
 import br.gov.serpro.saj.ged.model.Documento;
 import br.gov.serpro.saj.ged.model.Manifestacao;
@@ -50,13 +51,13 @@ public class DocumentoSajBC {
 
 	
 	public Long incluirManifestacao(Long idManifestacao, Long idObjetoTramitacao, Long tipoArquivo, 
-			Long tipoDocumento, InputStream arquivoStream) throws NegocioException {
+			InputStream arquivoStream) throws NegocioException {
 		
 		Manifestacao manifestacao = new Manifestacao();
 		manifestacao.setIdManifestacao(idManifestacao);
 		manifestacao.setIdObjetoTramitacao(idObjetoTramitacao);
 		
-		Documento doc = createDocumento(tipoArquivo, null, tipoDocumento);
+		Documento doc = createDocumento(tipoArquivo, null, 1L);
 		
 		if(validaManifestacao(manifestacao) && validaDocumento(doc)) {
 
@@ -74,13 +75,13 @@ public class DocumentoSajBC {
 	}
 
 	
-	public Long incluirReciboManifestacao(Long idManifestacao, Long tipoArquivo, 
-			Long tipoDocumento, InputStream arquivoStream) throws NegocioException {
+	public Long incluirReciboManifestacao(Long idManifestacao, Long tipoArquivo,
+			InputStream arquivoStream) throws NegocioException {
 		
 		ReciboManifestacao recibo = new ReciboManifestacao();		
 		recibo.setIdManifestacao(idManifestacao);
 		
-		Documento doc = createDocumento(tipoArquivo, null, tipoDocumento);
+		Documento doc = createDocumento(tipoArquivo, null, 4L);
 		
 		if(validaReciboManifestacao(recibo) && validaDocumento(doc)) {
 
@@ -98,13 +99,13 @@ public class DocumentoSajBC {
 	}
 	
 	public Long incluirAnexoManifestacao(Long idAnexo, Long idManifestacao, Long tipoArquivo, 
-			Long tipoDocumento, InputStream arquivoStream) throws NegocioException {
+			InputStream arquivoStream) throws NegocioException {
 		
 		AnexoManifestacao anexo = new AnexoManifestacao();
 		anexo.setIdAnexo(idAnexo);
 		anexo.setIdManifestacao(idManifestacao);
 		
-		Documento doc = createDocumento(tipoArquivo, null, tipoDocumento);
+		Documento doc = createDocumento(tipoArquivo, null, 2L);
 		
 		if(validaAnexoManifestacao(anexo) && validaDocumento(doc)) {
 

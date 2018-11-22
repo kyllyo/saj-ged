@@ -1,9 +1,9 @@
-package br.gov.serpro.saj.ged.business;
+package br.gov.serpro.saj.ged.exception;
 
 import javax.ejb.ApplicationException;
 
 @ApplicationException(rollback = true)
-public class NegocioException extends Exception {
+public class NegocioException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

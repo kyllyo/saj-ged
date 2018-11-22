@@ -11,12 +11,15 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+import br.gov.serpro.saj.ged.util.AmbienteUtil;
 
 @ApplicationScoped
 public class FileRepository {
 
-	//TODO String raiz = System.getProperty("saj.ged.pastaArquivos"); ou ambienteUtil.getPastaRaiz();
-	private String raiz = "/opt/Arquivos/V2/"; 	
+	@Inject
+	private AmbienteUtil ambienteUtil;
 	
 	private SimpleDateFormat pastaFormat = new SimpleDateFormat("yyyy/MM/dd/");	
 	
@@ -24,13 +27,13 @@ public class FileRepository {
 		
 		String pasta = pastaFormat.format(new Date());		
 		String nome = UUID.randomUUID().toString();		
-		return raiz + pasta + nome;
+		return ambienteUtil.getRepositorioRaiz() + pasta + nome;
 	}
 	
 	public String gerarCaminhoArquivoTemp() {
 		
 		String nome = UUID.randomUUID().toString();		
-		return raiz + nome;
+		return ambienteUtil.getRepositorioRaiz() + nome;
 	}
 
 	

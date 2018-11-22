@@ -2,6 +2,7 @@ package br.gov.serpro.saj.ged.rest;
 
 import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.gov.serpro.saj.ged.business.PecaIntegraBC;
+import br.gov.serpro.saj.ged.business.RespostaPecaIntegra;
 
 @ApplicationScoped
 @Path("/integra/pecas")
@@ -27,6 +29,8 @@ public class PecaIntegraRS {
 
 	@Inject
 	private PecaIntegraBC pecaIntegraBC;
+	
+	private static final Logger logger = Logger.getLogger("br.gov.serpro.saj.ged.rest.PecaIntegraRS");
 	
 	/**
 	 * 
@@ -36,7 +40,7 @@ public class PecaIntegraRS {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response incluir(@MultipartForm IncludeForm form) {
-		
+	    logger.info("Disparo no método: incluir");
 		try {			
 			Long id = pecaIntegraBC.incluir(
 					form.getProcesso(), form.getTipoArquivo(), form.getDados());
@@ -49,6 +53,7 @@ public class PecaIntegraRS {
 					.entity(id)
 					.build();
 		} catch (Exception e) {
+		    logger.severe("Erro no método: incluir " + e.getMessage());
 			return Response
 					.status(Status.NOT_FOUND)
 					.entity(e.getMessage())
@@ -59,7 +64,8 @@ public class PecaIntegraRS {
 	@GET
 	@Path("/{id:[0-9]+}")
 	@Produces("application/octet-stream")
-	public Response consultar(@PathParam("id") Long id) {
+	public Response consultar(@PathParam("id") Long id) throws Exception {
+	    logger.info("Disparo no método: consultar");
 		try {
 			
 			File arquivo = pecaIntegraBC.consultar(id);
@@ -67,8 +73,10 @@ public class PecaIntegraRS {
 					.build();
 			
 		} catch (Exception e) {
+		    logger.severe("Erro no método: consultar " + e.getMessage());
 			return Response
 					.status(Status.NOT_FOUND)
+					.type(MediaType.TEXT_PLAIN)
 					.entity(e.getMessage())
 					.build();
 		}
@@ -78,14 +86,14 @@ public class PecaIntegraRS {
 	@DELETE
 	@Path("/{id:[0-9]+}")
 	public Response excluir(@PathParam("id") Long id) {
+	    logger.info("Disparo no método: excluir");
 		try {
 			boolean excluido = pecaIntegraBC.excluir(id);
 			
-			return Response
-					.ok(excluido)
-					.build();
+			return Response.ok(excluido).build();
 			
 		} catch (Exception e) {
+		    logger.severe("Erro no método: excluir " + e.getMessage());
 			return Response
 					.status(Status.NOT_FOUND)
 					.entity(e.getMessage())
@@ -101,14 +109,16 @@ public class PecaIntegraRS {
 	 */
 	@GET
 	@Path("/consulta-id-pecas/{numero:[0-9]+}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response consultarIdsPecas(@PathParam("numero") String numero) {
+	    logger.info("Disparo no método: consultarIdsPecas");
 		try {
 			List<Long> pecas = pecaIntegraBC.consultarPecas(numero);
+
+			return Response.ok(new RespostaPecaIntegra(pecas)).build();
 			
-			return Response
-					.ok(pecas)
-					.build();
 		} catch (Exception e) {
+		    logger.severe("Erro no método: consultarIdsPecas " + e.getMessage());
 			return Response
 					.status(Status.NOT_FOUND)
 					.entity(e.getMessage())
@@ -116,8 +126,5 @@ public class PecaIntegraRS {
 		}
 
 	}
-
-
-
 }
 

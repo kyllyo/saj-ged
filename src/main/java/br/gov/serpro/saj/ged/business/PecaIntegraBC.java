@@ -9,6 +9,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import br.gov.serpro.saj.ged.exception.ArquivoNaoEncontradoException;
+import br.gov.serpro.saj.ged.exception.EntidadeNaoEncontradaException;
+import br.gov.serpro.saj.ged.exception.NegocioException;
 import br.gov.serpro.saj.ged.model.PecaIntegra;
 import br.gov.serpro.saj.ged.persistence.FileRepository;
 import br.gov.serpro.saj.ged.persistence.PecaIntegraDatabase;
@@ -81,7 +84,8 @@ public class PecaIntegraBC {
 		PecaIntegra peca = buscarPecaExistente(id);
 		File file = new File(peca.getCaminhoArquivo());
 		if (!file.canRead()) {
-			throw new NegocioException("Arquivo nao existe mo disco:" + peca.getCaminhoArquivo());
+			//throw new NegocioException("Arquivo nao existe mo disco:" + peca.getCaminhoArquivo());
+			throw new ArquivoNaoEncontradoException("Arquivo nao existe mo disco: " + peca.getCaminhoArquivo());
 		}
 		return file;
 	}
@@ -131,7 +135,8 @@ public class PecaIntegraBC {
 		}
 		PecaIntegra peca = databaseRepository.find(PecaIntegra.class, id);
 		if(peca == null || peca.getId() == null) {
-			throw new NegocioException("Id inexistente na base.");
+			//throw new NegocioException("Id inexistente na base.");
+			throw new EntidadeNaoEncontradaException("Id inexistente na base.");
 		}
 		return peca;
 	}

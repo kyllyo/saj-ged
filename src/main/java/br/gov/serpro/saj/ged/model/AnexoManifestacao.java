@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,7 +20,7 @@ public class AnexoManifestacao implements Serializable {
 	@Column(name = "id_documento", updatable = false, nullable = false)
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_documento", updatable = false, nullable = false, insertable = false)
 	private Documento documento;
 

@@ -43,6 +43,8 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfWriter;
 
+import br.gov.serpro.saj.ged.exception.NegocioException;
+
 
 /**
  * Utilitario para conversao de diferentes arquivos em PDF.

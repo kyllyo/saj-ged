@@ -2,6 +2,7 @@ package br.gov.serpro.saj.ged.security;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -20,6 +21,9 @@ import br.gov.serpro.saj.ged.business.UsuarioRest;
 public class AuthorizationFilter implements Filter {
 
     private static final String AUTHENTICATION_SCHEME = "Basic";
+    
+    @Inject
+    private UsuarioRest usuarioRest;
     
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -52,11 +56,11 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean isAuthorizationHeaderPresent(String authorizationHeader) {
-        return authorizationHeader != null && authorizationHeader.toLowerCase()
-                    .startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
+        return authorizationHeader != null && authorizationHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
     }
 
     private boolean validateCredentials(String credentials) {
-    	return UsuarioRest.validateUser(credentials);
+    	return usuarioRest.validateUser(credentials);
+    	
     }
 }
